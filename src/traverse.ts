@@ -77,19 +77,6 @@ export function resolveImport(
     };
   }
 
-  try {
-    return {
-      type: 'source_file',
-      path: resolve
-        .sync(path, {
-          basedir: cwd,
-          extensions: context.extensions,
-          moduleDirectory: context.moduleDirectory,
-        })
-        .replace(/\\/g, '/'),
-    };
-  } catch (e) {}
-
   const aliases = Object.keys(context.aliases).filter((alias) =>
     path.startsWith(alias),
   );
@@ -110,6 +97,19 @@ export function resolveImport(
       } catch (e) {}
     }
   }
+
+  try {
+    return {
+      type: 'source_file',
+      path: resolve
+        .sync(path, {
+          basedir: cwd,
+          extensions: context.extensions,
+          moduleDirectory: context.moduleDirectory,
+        })
+        .replace(/\\/g, '/'),
+    };
+  } catch (e) {}
 
   // last attempt, try prefix the path with ./, `import 'index' to `import './index'`
   // can be useful for the entry files
